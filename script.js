@@ -1,18 +1,34 @@
 const express = require('express');
 const app = express();
 const path = require("path");
-const fs = require('fs');
 const router = express.Router();
-//const csv = require('csv-parser');
+const fs = require('fs');
+const csv = require('csv-parser');
 
 //serving front-end code
 app.use('/', express.static('static'));
 
 
-const data = [
-    {genre_id: 1, name: "pop"},
-    {genre_id: 2, name: "rock"}
-];
+const data = [];
+
+
+// Turns it to an array of objects
+fs.createReadStream('lab3-data/genres.csv')
+    .pipe(csv())
+    .on('data', (rows) => {
+        data.push(rows);
+    }).on('end', () => {
+        //console.log(data);
+    });
+
+// Turns it to an array
+// var stream = require("fs").createReadStream("lab3-data/genres.csv")
+// var reader = require("readline").createInterface({ input: stream })
+// var arr = []
+// reader.on("line", (row) => { 
+//     data.push(row.split(",")) 
+//     console.log(data)
+// });
 
 // middleware to do logging
 app.use((req, res, next) => {
@@ -25,10 +41,33 @@ router.get('/', (req, res) => {
     res.send(data);
 });
 
-// data based on id
-router.get('/:genre_id', (req, res) => {
-    const genre = data.find(c => c.genre_id === parseInt(req.params.genre_id));
-    res.send(genre);
+// data based on id (with params)
+// router.get('/:key', (req, res) => {
+//     var searchTerm = req.query.searchterm;
+//     console.log(searchTerm);
+    
+//     const name = req.params.key;
+//     const genre = data.find(c => c.title === name);
+    
+//     //const genre = data.find(c => c.title === (req.params.title));
+//     if (data) {
+//         res.send(genre);
+//     } else {
+//         res.status(404).send(`Genre was not found!`);
+//     }
+//     console.log(genre)
+// });
+
+app.get('/api/data/search', (req, res) => {
+    var searchTerm = req.query.searchterm;
+    console.log(searchTerm);
+    
+    const genre = data.find(c => c.title === searchTerm);
+        if (data) {
+        res.send(genre);
+    } else {
+        res.status(404).send(`${searchTerm} was not found!`);
+    }
     console.log(genre)
 });
 
