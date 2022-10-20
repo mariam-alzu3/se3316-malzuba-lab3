@@ -1,5 +1,5 @@
-const express = require('express');
-const app = express();
+const express = require('express');     //load express
+const app = express();                  //create app using express
 const path = require("path");
 const router = express.Router();
 const fs = require('fs');
@@ -11,7 +11,6 @@ app.use('/', express.static('static'));
 
 const data = [];
 
-
 // Turns it to an array of objects
 fs.createReadStream('lab3-data/genres.csv')
     .pipe(csv())
@@ -21,14 +20,6 @@ fs.createReadStream('lab3-data/genres.csv')
         //console.log(data);
     });
 
-// Turns it to an array
-// var stream = require("fs").createReadStream("lab3-data/genres.csv")
-// var reader = require("readline").createInterface({ input: stream })
-// var arr = []
-// reader.on("line", (row) => { 
-//     data.push(row.split(",")) 
-//     console.log(data)
-// });
 
 // middleware to do logging
 app.use((req, res, next) => {
