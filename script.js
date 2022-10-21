@@ -9,17 +9,35 @@ const csv = require('csv-parser');
 app.use('/', express.static('static'));
 
 
-const data = [];
+const genreInfo = [];
+const albumInfo = [];
+const artistInfo = [];
+
 
 // Turns it to an array of objects
 fs.createReadStream('lab3-data/genres.csv')
     .pipe(csv())
     .on('data', (rows) => {
-        data.push(rows);
+        genreInfo.push(rows);
     }).on('end', () => {
-        //console.log(data);
+        //console.log(genreInfo);
     });
 
+fs.createReadStream('lab3-data/raw_albums.csv')
+    .pipe(csv())
+    .on('data', (rows) => {
+        albumInfo.push(rows);
+    }).on('end', () => {
+        //console.log(albumInfo);
+    });
+
+fs.createReadStream('lab3-data/raw_artists.csv')
+    .pipe(csv())
+    .on('data', (rows) => {
+        artistInfo.push(rows);
+    }).on('end', () => {
+        console.log(artistInfo);
+    });
 
 // middleware to do logging
 app.use((req, res, next) => {
@@ -28,38 +46,59 @@ app.use((req, res, next) => {
 });
 
 // get list of data
-router.get('/', (req, res) => {
-    res.send(data);
+router.get('/genres', (req, res) => {
+    res.send(genreInfo);
 });
 
-// data based on id (with params)
-// router.get('/:key', (req, res) => {
-//     var searchTerm = req.query.searchterm;
-//     console.log(searchTerm);
-    
-//     const name = req.params.key;
-//     const genre = data.find(c => c.title === name);
-    
-//     //const genre = data.find(c => c.title === (req.params.title));
-//     if (data) {
-//         res.send(genre);
-//     } else {
-//         res.status(404).send(`Genre was not found!`);
-//     }
-//     console.log(genre)
-// });
+// get list of data
+router.get('/albums', (req, res) => {
+    res.send(albumInfo);
+});
 
-app.get('/api/data/search', (req, res) => {
+// get list of data
+router.get('/artists', (req, res) => {
+    res.send(artistInfo);
+});
+
+
+app.get('/api/data/genre', (req, res) => {
     var searchTerm = req.query.searchterm;
     console.log(searchTerm);
-    
-    const genre = data.find(c => c.title === searchTerm);
-        if (data) {
+
+    const genre = genreInfo.find(c => c.title === searchTerm);
+    if (genreInfo) {
         res.send(genre);
     } else {
         res.status(404).send(`${searchTerm} was not found!`);
     }
     console.log(genre)
+});
+
+
+app.get('/api/data/album', (req, res) => {
+    var searchTerm = req.query.searchterm2;
+    console.log(searchTerm);
+
+    const album = albumInfo.find(c => c.album_title === searchTerm);
+    if (albumInfo) {
+        res.send(album);
+    } else {
+        res.status(404).send(`${searchTerm} was not found!`);
+    }
+    console.log(album)
+});
+
+app.get('/api/data/artist', (req, res) => {
+    var searchTerm = req.query.searchterm3;
+    console.log(searchTerm);
+
+    const artist = artistInfo.find(c => c.artist_name === searchTerm);
+    if (albumInfo) {
+        res.send(artist.artist_id);
+    } else {
+        res.status(404).send(`${searchTerm} was not found!`);
+    }
+    console.log(artist)
 });
 
 app.use('/api/data', router)
