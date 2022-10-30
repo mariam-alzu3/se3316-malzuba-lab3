@@ -32,23 +32,23 @@
                 <span class="title">Lab 3</span>
             </div>
             <div class="search">
-                    <form action="/api/data/genre" method="GET" class="search-box">
-                        <input type="text" class="form-control" maxlength="20" placeholder="Search by Track..."
-                            id="search-genre" name="searchterm">
-                        <button type="submit" class="btn">Submit</button>
-                    </form>
+                <form action="/api/data/genre" method="GET" class="search-box">
+                    <input type="text" class="form-control" maxlength="20" placeholder="Search by Track..."
+                        id="search-genre" name="searchterm">
+                    <button type="submit" class="btn">Submit</button>
+                </form>
 
-                    <form action="/api/data/album" method="GET" class="search-box">
-                        <input type="text" class="form-control" maxlength="20" placeholder="Search by Album..."
-                            id="search-album" name="searchterm2">
-                        <button type="submit" class="btn">Submit</button>
-                    </form>
+                <form action="/api/data/album" method="GET" class="search-box">
+                    <input type="text" class="form-control" maxlength="20" placeholder="Search by Album..."
+                        id="search-album" name="searchterm2">
+                    <button type="submit" class="btn">Submit</button>
+                </form>
 
-                    <form action="/api/data/artist" method="GET" class="search-box">
-                        <input type="text" class="form-control" maxlength="20" placeholder="Search by Artist..."
-                            id="search-artist" name="searchterm3">
-                        <button type="submit" class="btn">Submit</button>
-                    </form>
+                <form action="/api/data/artist" method="GET" class="search-box">
+                    <input type="text" class="form-control" maxlength="20" placeholder="Search by Artist..."
+                        id="search-artist" name="searchterm3">
+                    <button type="submit" class="btn">Submit</button>
+                </form>
             </div>
             <div class="playlist">
                 <p>My Playlist</p>
@@ -56,10 +56,31 @@
                 <a href="#">Fav Songs</a>
             </div>
         </div>
+
+        <!-- <div class="main" id="main">
+            <h1>SONGS HERE</h1>
+        </div> -->
+
+        <div class="songs" id="songs" style="overflow-y: scroll; height:820px;">
+            <div >
+                <table class='table' id="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Album</th>
+                    </tr>
+                    <tr>
+                    </tr>
+                </table>
+            </div>
+            <input type="button" id="seeMoreRecords" value="More">
+        </div>
     </div>
-    
+
+
+
     <!-- Embedded JavaScript go here -->
-    <script src="script.js"></script>
+    <script src="main.js"></script>
 </body>
 
 </html>

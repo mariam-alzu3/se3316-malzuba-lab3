@@ -4,11 +4,13 @@ const path = require("path");
 const router = express.Router();
 const fs = require('fs');
 const csv = require('csv-parser');
+const cors = require('cors')
+app.use(cors())
 
 //serving front-end code
 app.use('/', express.static('static'));
 
-
+const trackInfo = [];
 const genreInfo = [];
 const albumInfo = [];
 const artistInfo = [];
@@ -21,6 +23,14 @@ fs.createReadStream('lab3-data/genres.csv')
         genreInfo.push(rows);
     }).on('end', () => {
         //console.log(genreInfo);
+    });
+
+fs.createReadStream('lab3-data/raw_tracks.csv')
+    .pipe(csv())
+    .on('data', (rows) => {
+        trackInfo.push(rows);
+    }).on('end', () => {
+        //console.log(trackInfo);
     });
 
 fs.createReadStream('lab3-data/raw_albums.csv')
@@ -36,7 +46,6 @@ fs.createReadStream('lab3-data/raw_artists.csv')
     .on('data', (rows) => {
         artistInfo.push(rows);
     }).on('end', () => {
-        console.log(artistInfo);
     });
 
 // middleware to do logging
@@ -51,6 +60,11 @@ router.get('/genres', (req, res) => {
 });
 
 // get list of data
+router.get('/tracks', (req, res) => {
+    res.send(trackInfo);
+});
+
+// get list of data
 router.get('/albums', (req, res) => {
     res.send(albumInfo);
 });
@@ -60,6 +74,9 @@ router.get('/artists', (req, res) => {
     res.send(artistInfo);
 });
 
+// app.get('/api/data/songs', (req, res) => {
+//     res.send("ffff");
+// });
 
 app.get('/api/data/genre', (req, res) => {
     var searchTerm = req.query.searchterm;
@@ -94,7 +111,8 @@ app.get('/api/data/artist', (req, res) => {
 
     const artist = artistInfo.find(c => c.artist_name === searchTerm);
     if (albumInfo) {
-        res.send(artist.artist_id);
+        //res.send(artist.artist_id);
+        res.send(artist.artist_id + "\n" + artist.artist_name);
     } else {
         res.status(404).send(`${searchTerm} was not found!`);
     }
