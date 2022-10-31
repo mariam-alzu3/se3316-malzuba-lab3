@@ -10,21 +10,6 @@
 </head>
 
 <body>
-    <!-- Place your content here -->
-    <!-- <h1>SE 3316 Lab 3</h1>
-    <p>Hello World!</p> -->
-
-    <!-- <div class="search-container">
-        <form action="/api/data/search" method="GET" class="search-box">
-            <input type="text" class="form-control" maxlength="20" placeholder="Search by name ..." id="search"
-                name="searchterm">
-            <button type="submit" class="btn">Submit</button>
-        </form>
-    </div> -->
-
-
-    <!-- <div class="search-result" id="search-result">
-    </div> -->
 
     <div class="container">
         <div class="sidebar">
@@ -49,6 +34,7 @@
                         id="search-artist" name="searchterm3">
                     <button type="submit" class="btn">Submit</button>
                 </form>
+                <button type="submit" class="btn">SEARCH</button>
             </div>
             <div class="playlist">
                 <p>My Playlist</p>
@@ -59,15 +45,17 @@
 
         <!-- <div class="main" id="main">
             <h1>SONGS HERE</h1>
+            <input type="text" class="form-control" maxlength="20" placeholder="Search by Artist..." id="search-artist">
+            <button type="submit" class="btn">SEARCH!!!</button>
         </div> -->
 
-        <div class="songs" id="songs" style="overflow-y: scroll; height:820px;">
-            <div >
+        <div class="songs-container" id="songs" style="overflow-y: scroll; height:820px;">
+            <div>
                 <table class='table' id="table">
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Album</th>
+                        <th class="header">ID</th>
+                        <th class="header">Name</th>
+                        <th class="header">Album</th>
                     </tr>
                     <tr>
                     </tr>
@@ -75,8 +63,8 @@
             </div>
             <input type="button" id="seeMoreRecords" value="More">
         </div>
-    </div>
 
+    </div>
 
 
     <!-- Embedded JavaScript go here -->

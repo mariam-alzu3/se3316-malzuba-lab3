@@ -76,13 +76,26 @@ body {
     margin-bottom: 10px;
 }
 
-
-
 #table {
     display: block;
     margin-top: 20px;
+    margin-left: 10px;
+    text-align: left;
 }
+
+.header {
+    background-color: rgb(160, 160, 160);
+}
+
 th, td {
-    border: 1px solid black;
+    /* border: 1px solid black; */
     padding: 5px;
+    width: 500px;
+    color: #FFFFFF;
+    /* background-color: yellowgreen; */
+    
+}
+
+.songs-container {
+    width: 1400px;
 }
