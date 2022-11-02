@@ -17,7 +17,7 @@
                 <span class="title">Lab 3</span>
             </div>
             <div class="search">
-                <form action="/api/data/genre" method="GET" class="search-box">
+                <!-- <form action="/api/data/genre" method="GET" class="search-box">
                     <input type="text" class="form-control" maxlength="20" placeholder="Search by Track..."
                         id="search-genre" name="searchterm">
                     <button type="submit" class="btn">Submit</button>
@@ -27,27 +27,34 @@
                     <input type="text" class="form-control" maxlength="20" placeholder="Search by Album..."
                         id="search-album" name="searchterm2">
                     <button type="submit" class="btn">Submit</button>
+                </form> -->
+
+                <form class="search-box">
+                    <input type="text" class="form-control" maxlength="20" placeholder="Search by Track..."
+                        id="search-track" name="searchterm1">
+                    <button type="button" class="btn" id="search-track-button">Search</button>
                 </form>
 
-                <form action="/api/data/artist" method="GET" class="search-box">
-                    <input type="text" class="form-control" maxlength="20" placeholder="Search by Artist..."
-                        id="search-artist" name="searchterm3">
-                    <button type="submit" class="btn">Submit</button>
+                <form class="search-box">
+                    <input type="text" class="form-control" maxlength="20" placeholder="Search by Album..."
+                        id="search-album" name="searchterm2">
+                    <button type="button" class="btn" id="search-album-button">Search</button>
                 </form>
-                <button type="submit" class="btn">SEARCH</button>
+
+                <form action="results.html" class="search-box">
+                    <input type="text" class="form-control" maxlength="20" placeholder="Search by Artist..."
+                        id="search-artist" name="searchterm3" onclick="passValues()">
+                    <button type="button" class="btn" id="search-artist-button">Search
+                        <a href="/results.html">search</a>
+                    </button>
+                </form>
             </div>
             <div class="playlist">
-                <p>My Playlist</p>
+                <p>My Playlists</p>
                 <h5>Create Playlist</h5>
                 <a href="#">Fav Songs</a>
             </div>
         </div>
-
-        <!-- <div class="main" id="main">
-            <h1>SONGS HERE</h1>
-            <input type="text" class="form-control" maxlength="20" placeholder="Search by Artist..." id="search-artist">
-            <button type="submit" class="btn">SEARCH!!!</button>
-        </div> -->
 
         <div class="songs-container" id="songs" style="overflow-y: scroll; height:820px;">
             <div>
@@ -61,11 +68,26 @@
                     </tr>
                 </table>
             </div>
-            <input type="button" id="seeMoreRecords" value="More">
+            <input type="button" id="seeMoreRecords" value="View More Tracks">
         </div>
-
     </div>
 
+
+    <div class="search-container">
+        <!-- <button class="artist-btn" id="artist-btn" type="button">SEARCH ARTIST
+            <a href="/results.html">search</a>
+        </button> -->
+
+        <ul class="list-group" id="list"></ul>
+    </div>
+
+    <script>
+        function passValues() {
+            var list = document.getElementById('list').getAttribute('value');
+            localStorage.setItem('textvalue', list);
+            return false;
+        }
+    </script>
 
     <!-- Embedded JavaScript go here -->
     <script src="main.js"></script>

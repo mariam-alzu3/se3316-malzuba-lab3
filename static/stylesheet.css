@@ -99,3 +99,55 @@ th, td {
 .songs-container {
     width: 1400px;
 }
+
+
+/* .search-box{
+    width: 20%;
+    max-width: 700px;
+    height: 30px;
+    background: rgba(255,255,255,0.2);
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    border-radius: 60px;
+    padding: 10px 20px;
+    backdrop-filter: blur(4px) saturate(180%);
+} */
+
+/* .search-container .input {
+    background: transparent;
+    flex: 1;
+    border: 0;
+    outline: none;
+    padding: 24px 10px;
+    font-size: 20px;
+} */
+
+/* .popup {
+    max-width: 50ch;
+}
+
+.search-list-item{
+    white-space: pre;
+}
+  
+.popup::backdrop {
+    background: rgb(0 0 0 / 0.4);
+} */
+  
+#exit-button{
+    border: 0;
+    cursor: pointer;
+    font-weight: 700;
+    padding: var(--size-2) var(--size-4);
+    background: #1c3d22;
+    height: 40px;
+    width: 60px;
+    border-radius: 20%;
+    font-size: 15px;
+    color: rgb(85, 211, 102);
+} 
+
+.search-list-item:nth-of-type(1n+11) {
+    display: none;
+};
