@@ -27,7 +27,12 @@ function selectFewerArtistProps(show) {
 
 function selectFewerTrackProps(show) {
     const { track_title, track_genres, track_number, album_id, album_title, artist_id, artist_name, tags, track_date_created, track_date_recorded, track_duration } = show;
-    return { track_title, track_genres, track_number, album_id, album_title, artist_id, artist_name, tags, track_date_created, track_date_recorded, track_duration  };
+    return { track_title, track_genres, track_number, album_id, album_title, artist_id, artist_name, tags, track_date_created, track_date_recorded, track_duration };
+}
+
+function selectFewerAlbumProps(show) {
+    const { album_title, album_id, artist_name, album_date_released, album_listens, album_url } = show;
+    return { album_title, album_id, artist_name, album_date_released, album_listens, album_url };
 }
 
 // Turns it to an array of objects
@@ -95,32 +100,42 @@ app.get('/api/data/genre/:id', (req, res) => {
 });
 
 
-app.get('/api/data/album/:id', (req, res) => {
+app.get('/api/data/album/:name', (req, res) => {
 
-    const album = albumInfo.find(c => c.album_title === req.params.id);
-    if (albumInfo) {
-        //res.send(album);
-        // res.send(`
-        // <!DOCTYPE html>
-        // <html>
-        //     <head>
-        //        <link rel="stylesheet" href="stylesheet.css">
-        //        <base?>
-        //     </head>
-        //     <body>
-        //         <p>Name: ${album.album_title}</p>
-        //         <p>ID: ${album.album_id}</p>
-        //         <p>Artist: ${album.artist_name}</p>
-        //         <p>Released: ${album.album_date_released}</p>
-        //         <p>Listens: ${album.album_listens}</p>                
-        //         <p>Website: ${album.album_url}</p>
-        //     </body>
-        // </html>
-        // `)
+    var newAlbum = albumInfo.map(selectFewerAlbumProps)
+    const album = newAlbum.find(al => al.album_title === (req.params.name))
+    if (newAlbum) {
+        res.send(album)
     } else {
-        res.status(404).send('Album was not found!');
+        res.status(404).send("Album was not found!");
     }
     console.log(album)
+
+
+    // const album = albumInfo.find(c => c.album_title === req.params.id);
+    // if (albumInfo) {
+    //     res.send(album);
+    //     res.send(`
+    //     <!DOCTYPE html>
+    //     <html>
+    //         <head>
+    //            <link rel="stylesheet" href="stylesheet.css">
+    //            <base?>
+    //         </head>
+    //         <body>
+    //             <p>Name: ${album.album_title}</p>
+    //             <p>ID: ${album.album_id}</p>
+    //             <p>Artist: ${album.artist_name}</p>
+    //             <p>Released: ${album.album_date_released}</p>
+    //             <p>Listens: ${album.album_listens}</p>                
+    //             <p>Website: ${album.album_url}</p>
+    //         </body>
+    //     </html>
+    //     `)
+    // } else {
+    //     res.status(404).send('Album was not found!');
+    // }
+    // console.log(album)
 });
 
 app.get('/api/data/artist/:id', (req, res) => {
