@@ -17,8 +17,12 @@ const genreInfo = [];
 const albumInfo = [];
 const artistInfo = [];
 const playlists = [
-    { id: "1", name: "x", tracks: ["song 1", "song 2"] }
+    { id: "1", name: "x", tracks: ["20", "2"] }
 ];
+
+// const playlists = [
+//     { id: "1", name: "x", trackID1 : "2", trackID2 : "20" }
+// ];
 
 //functions to select specific properties
 function selectFewerGenreProps(show) {
@@ -253,7 +257,7 @@ router.put('/playlists/:name', (req, res) => {
 });
 
 
-//7. update tracks in a list (doesn't work)
+//7. update tracks in a list
 router.post('/playlists/:name', (req, res) => {
     const newPlaylist = req.body;
     console.log("Track Titles: ", newPlaylist)
@@ -266,15 +270,21 @@ router.post('/playlists/:name', (req, res) => {
         res.status(404).send(`List ${req.params.name} not found!`)
     } else {
         console.log("Updating tracks for ", req.params.name);
-        //playlists[playlist.tracks] += req.body.tracks
 
-        for (i = 0; i <= playlists.length; i++) {
-            console.log(playlists.length)
-            playlists[playlist.tracks[i]] = req.body.tracks[i]
-
-            console.log(playlist.tracks[i])
-            console.log(req.body.tracks[i])
+        //getting current tracks
+        var currTracks = [];
+        for (i = 0; i < playlist.tracks.length; i++) {
+            console.log(playlist.tracks.length)
+            currTracks[i] = playlist.tracks[i];
         }
+        console.log("curr", currTracks)
+
+        var newTracks = [];
+        //newTracks.push(req.body.tracks)
+        newTracks = req.body.tracks;
+        console.log("new", newTracks)
+        playlist.tracks.splice(0, playlist.tracks.length, ...newTracks)
+        
         res.send(req.body)
     }
 });

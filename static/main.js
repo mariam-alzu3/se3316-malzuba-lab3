@@ -125,6 +125,34 @@ document.getElementById('search-track-button').addEventListener('click', loadTra
 document.getElementById('search-album-button').addEventListener('click', loadAlbums);
 document.getElementById('search-artist-button').addEventListener('click', loadArtists);
 
-// function passValues() {
-//     localStorage.setItem("textvalue", list)
-// }
+//create playlist
+
+const popup = document.querySelector("#popup");                     //pop-up
+const openPopUP = document.getElementById("create-playlist");           //search button to open the popup
+const closePopUp = document.querySelector(".close-button");         //exit button closes the popup
+const addMoreTrack = document.getElementById('add-more-tracks')
+
+openPopUP.addEventListener("click", () => {                         //clicking the search button shows the popup
+    popup.showModal();
+});
+
+closePopUp.addEventListener("click", () => {
+    popup.close();                                                  //clicking the exit button closes the popup
+});
+
+const tracksFieldsList = document.getElementById('tracks-fields'); //survey options
+const addMoreTracks = document.getElementById('add-more-tracks') //add more fields
+
+addMoreTracks.onclick = function () {
+    var newField = document.createElement('input');
+    newField.setAttribute('type', 'text');
+    newField.setAttribute('maxlength', '20');
+    newField.setAttribute('class', 'form-control');
+    newField.setAttribute('id', 'add-tracks');
+    newField.setAttribute('placeholder', 'Add a track ID');
+    tracksFieldsList.appendChild(newField);
+}
+
+function createPlaylist() {
+    
+}

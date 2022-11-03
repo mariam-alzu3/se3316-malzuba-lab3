@@ -123,30 +123,58 @@ th, td {
     font-size: 20px;
 } */
 
-/* .popup {
-    max-width: 50ch;
+.popup {
+    width: 600px;
+    height: 400px;
+    position: absolute;
+    top: 50%;
+    bottom: 50%;
+    transform: translate(70%, -50%);
+    background-color: #303030;
 }
 
-.search-list-item{
+/* .search-list-item{
     white-space: pre;
-}
+} */
   
 .popup::backdrop {
-    background: rgb(0 0 0 / 0.4);
-} */
+    background: rgb(0 0 0 / 0.8);
+}
   
 #exit-button{
     border: 0;
     cursor: pointer;
     font-weight: 700;
     padding: var(--size-2) var(--size-4);
-    background: #1c3d22;
+    background: #33144d;
     height: 40px;
-    width: 60px;
+    width: 68px;
     border-radius: 20%;
     font-size: 15px;
-    color: rgb(85, 211, 102);
+    color: rgb(133, 85, 211);
+    transform: translate(517px, 210px);
 } 
+
+.popup p {
+    color: #FFFFFF;
+    width: 120px;
+    transform: translate(52px, 30px);
+    line-height: 40px;
+}
+
+.popup input {
+    transform: translate(50px, 25px);
+    width: 500px;
+    height: 25px;
+}
+
+button#add-more-tracks {
+    position: absolute;
+    width: 26px;
+    height: 25px;
+    font-size: 20px;
+    transform: translate(-15px, 34px);
+}
 
 .search-list-item:nth-of-type(1n+11) {
     display: none;

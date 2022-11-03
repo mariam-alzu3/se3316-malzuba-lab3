@@ -31,7 +31,7 @@
 
                 <form class="search-box">
                     <input type="text" class="form-control" maxlength="20" placeholder="Search by Track..."
-                        id="search-track" >
+                        id="search-track">
                     <button type="button" class="btn" id="search-track-button">Search</button>
                 </form>
 
@@ -51,9 +51,26 @@
             </div>
             <div class="playlist">
                 <p>My Playlists</p>
-                <h5>Create Playlist</h5>
+                <!-- <h5>Create Playlist</h5> -->
+                <button type="button" class="create-playlist" id="create-playlist">Create Playlist</button>
                 <a href="#">Fav Songs</a>
             </div>
+        </div>
+
+        <div class="playlist-form" id="playlist-form">
+            <dialog class="popup" id="popup">
+                <p>Playlist name:</p>
+                <input type="text" class="form-control" maxlength="20" placeholder="Add a name " id="add-playlist-name">
+
+                <p>Tracks:</p>
+                <div id="tracks-fields">
+                    <input type="text" class="form-control" maxlength="20" placeholder="Add a track ID "
+                        id="add-tracks">
+                </div>
+
+                <button id="exit-button" class="button close-button">Exit</button>
+                <button id="add-more-tracks" class="add-more-tracks">+</button>
+            </dialog>
         </div>
 
         <div class="songs-container" id="songs" style="overflow-y: scroll; height:820px;">
