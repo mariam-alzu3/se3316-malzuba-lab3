@@ -10,12 +10,14 @@ app.use(cors())
 //serving front-end code
 app.use('/', express.static('static'));
 
+//arrays to store the csv data in
 const trackInfo = [];
 const genreInfo = [];
 const albumInfo = [];
 const artistInfo = [];
 
-function selectFewerGenreProps(show) {
+//functions to select specific properties
+function selectFewerGenreProps(show) {                          
     const { genre_id, title, parent } = show;
     return { genre_id, title, parent };
 }
@@ -26,8 +28,13 @@ function selectFewerArtistProps(show) {
 }
 
 function selectFewerTrackProps(show) {
-    const { track_title, track_genres, track_number, album_id, album_title, artist_id, artist_name, tags, track_date_created, track_date_recorded, track_duration } = show;
-    return { track_title, track_genres, track_number, album_id, album_title, artist_id, artist_name, tags, track_date_created, track_date_recorded, track_duration };
+    const { track_id, track_title, track_genres, track_number, album_id, album_title, artist_id, artist_name, tags, track_date_created, track_date_recorded, track_duration } = show;
+    return { track_id, track_title, track_genres, track_number, album_id, album_title, artist_id, artist_name, tags, track_date_created, track_date_recorded, track_duration };
+}
+
+function selectFewerTrackTitleProps(show) {
+    const { track_title, track_id } = show;
+    return { track_title, track_id };
 }
 
 function selectFewerAlbumProps(show) {
@@ -35,8 +42,13 @@ function selectFewerAlbumProps(show) {
     return { album_title, album_id, artist_name, album_date_released, album_listens, album_url };
 }
 
-// Turns it to an array of objects
-fs.createReadStream('lab3-data/genres.csv')
+function selectFewerAlbumTracksProps(show) {
+    const { album_title, track_id } = show;
+    return { album_title, track_id };
+}
+
+
+fs.createReadStream('lab3-data/genres.csv')                 //parse genres csv into an object array
     .pipe(csv())
     .on('data', (rows) => {
         genreInfo.push(rows);
@@ -44,7 +56,7 @@ fs.createReadStream('lab3-data/genres.csv')
         //console.log(genreInfo);
     });
 
-fs.createReadStream('lab3-data/raw_tracks.csv')
+fs.createReadStream('lab3-data/raw_tracks.csv')             //parse tracks csv into an object array
     .pipe(csv())
     .on('data', (rows) => {
         trackInfo.push(rows);
@@ -52,7 +64,7 @@ fs.createReadStream('lab3-data/raw_tracks.csv')
         //console.log(trackInfo);
     });
 
-fs.createReadStream('lab3-data/raw_albums.csv')
+fs.createReadStream('lab3-data/raw_albums.csv')             //parse albums csv into an object array
     .pipe(csv())
     .on('data', (rows) => {
         albumInfo.push(rows);
@@ -60,7 +72,7 @@ fs.createReadStream('lab3-data/raw_albums.csv')
         //console.log(albumInfo);
     });
 
-fs.createReadStream('lab3-data/raw_artists.csv')
+fs.createReadStream('lab3-data/raw_artists.csv')            //parse artist csv into an object array
     .pipe(csv())
     .on('data', (rows) => {
         artistInfo.push(rows);
@@ -73,35 +85,35 @@ app.use((req, res, next) => {
     next();
 });
 
-// get list of data
+// get list of all genres
 router.get('/genres', (req, res) => {
     res.send(genreInfo);
 });
 
-// get list of data
+// get list of all track
 router.get('/tracks', (req, res) => {
     res.send(trackInfo);
 });
 
-// get list of data
+// get list of all albums
 router.get('/albums', (req, res) => {
     res.send(albumInfo);
 });
 
-// get list of data
+// get list of all artists
 router.get('/artists', (req, res) => {
     res.send(artistInfo);
 });
 
-app.get('/api/data/genre/:id', (req, res) => {
+//get genre info by genre ID
+app.get('/api/data/genres/:id', (req, res) => {
     var newGenre = genreInfo.map(selectFewerGenreProps)
     const genre = newGenre.find(g => g.genre_id === (req.params.id))
     res.send(genre)
 });
 
-
-app.get('/api/data/album/:name', (req, res) => {
-
+//get album info by album name
+app.get('/api/data/albums/:name', (req, res) => {
     var newAlbum = albumInfo.map(selectFewerAlbumProps)
     const album = newAlbum.find(al => al.album_title === (req.params.name))
     if (newAlbum) {
@@ -110,7 +122,6 @@ app.get('/api/data/album/:name', (req, res) => {
         res.status(404).send("Album was not found!");
     }
     console.log(album)
-
 
     // const album = albumInfo.find(c => c.album_title === req.params.id);
     // if (albumInfo) {
@@ -138,7 +149,9 @@ app.get('/api/data/album/:name', (req, res) => {
     // console.log(album)
 });
 
-app.get('/api/data/artist/:id', (req, res) => {
+
+//get artist info by artist ID
+app.get('/api/data/artists/:id', (req, res) => {
     var newArtist = artistInfo.map(selectFewerArtistProps)
     const artist = newArtist.find(a => a.artist_id === (req.params.id))
     if (newArtist) {
@@ -149,10 +162,11 @@ app.get('/api/data/artist/:id', (req, res) => {
     console.log(artist)
 });
 
-app.get('/api/data/track/:name', (req, res) => {
 
+//get track information by track ID
+app.get('/api/data/tracks/:id', (req, res) => {
     var newTrack = trackInfo.map(selectFewerTrackProps)
-    const track = newTrack.find(t => t.track_title === (req.params.name))
+    const track = newTrack.find(t => t.track_id === (req.params.id))
     if (newTrack) {
         res.send(track)
     } else {
@@ -161,7 +175,32 @@ app.get('/api/data/track/:name', (req, res) => {
     console.log(track)
 });
 
+
+//get tracks IDs from track title
+app.get('/api/data/tracks-title/:name', (req, res) => {
+    var newTrack = trackInfo.map(selectFewerTrackTitleProps)
+    const track = newTrack.filter(t => t.track_title.toLowerCase() === (req.params.name.toLowerCase())).slice(0, 11)
+    if (newTrack) {
+        res.send(track)
+    } else {
+        res.status(404).send("Given ID was not found!");
+    }
+    console.log(track)
+});
+
+
+//get track IDs from album title
+app.get('/api/data/albums-title/:name', (req, res) => {
+    var tracksFromAlbum = trackInfo.map(selectFewerAlbumTracksProps)
+    const tracks = tracksFromAlbum.filter(a => a.album_title.toLowerCase() === (req.params.name.toLowerCase())).slice(0, 11)
+    if (tracksFromAlbum) {
+        res.send(tracks)
+    } else {
+        res.status(404).send("Given ID was not found!");
+    }
+    console.log(tracks)
+});
+
 app.use('/api/data', router)
 
 app.listen(3000, () => console.log('Listening on port 3000...'))
-

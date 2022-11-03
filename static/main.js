@@ -26,13 +26,10 @@ function getData() {
 
 getData();
 
-
 btn.onclick = function () {
     getData();
 }
 
-//************************************************************************************************//
-//************************************************************************************************//
 
 function loadArtists() {
     let searchInput = document.getElementById('search-artist');
