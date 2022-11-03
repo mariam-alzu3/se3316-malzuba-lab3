@@ -4,7 +4,8 @@ const path = require("path");
 const router = express.Router();
 const fs = require('fs');
 const csv = require('csv-parser');
-const cors = require('cors')
+const cors = require('cors');
+const { parse } = require('path');
 app.use(cors())
 
 //serving front-end code
@@ -15,9 +16,12 @@ const trackInfo = [];
 const genreInfo = [];
 const albumInfo = [];
 const artistInfo = [];
+const playlists = [
+    { id: "1", name: "x", tracks: [ "song 1", "song 2"] }
+];
 
 //functions to select specific properties
-function selectFewerGenreProps(show) {                          
+function selectFewerGenreProps(show) {
     const { genre_id, title, parent } = show;
     return { genre_id, title, parent };
 }
@@ -84,6 +88,9 @@ app.use((req, res, next) => {
     console.log(`${req.method} request for ${req.url}`);
     next();
 });
+
+//parse data in body as JSON
+router.use(express.json());
 
 // get list of all genres
 router.get('/genres', (req, res) => {
@@ -200,6 +207,33 @@ app.get('/api/data/albums-title/:name', (req, res) => {
     }
     console.log(tracks)
 });
+
+
+//get playlists
+router.get('/playlists', (req, res) => {
+    res.send(playlists);
+});
+
+
+// create new playlist
+router.put('/playlists/:name', (req, res) => {
+    const newPlaylist = req.body;
+    console.log("Playlist Name: ", newPlaylist)
+    //add name
+    newPlaylist.name = (req.params.name);
+
+    //replace
+    const playlist = playlists.find(p => p.name === (newPlaylist.name));
+    if (!playlists.includes(playlist)) {
+        console.log("creating new playlist")
+        playlists.push(newPlaylist);
+    } else {
+        console.log("Playlist already exists");
+    }
+
+    res.send(newPlaylist);
+});
+
 
 app.use('/api/data', router)
 
