@@ -155,6 +155,20 @@ th, td {
     transform: translate(517px, 210px);
 } 
 
+.save-button {
+    border: 0;
+    cursor: pointer;
+    font-weight: 700;
+    padding: var(--size-2) var(--size-4);
+    background: #33144d;
+    height: 40px;
+    width: 68px;
+    border-radius: 20%;
+    font-size: 15px;
+    color: rgb(133, 85, 211);
+    transform: translate(364px, 210px);
+}
+
 .popup p {
     color: #FFFFFF;
     width: 120px;
@@ -173,7 +187,7 @@ button#add-more-tracks {
     width: 26px;
     height: 25px;
     font-size: 20px;
-    transform: translate(-15px, 34px);
+    transform: translate(-91px, 34px);
 }
 
 .search-list-item:nth-of-type(1n+11) {

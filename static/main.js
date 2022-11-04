@@ -140,8 +140,23 @@ closePopUp.addEventListener("click", () => {
     popup.close();                                                  //clicking the exit button closes the popup
 });
 
-const tracksFieldsList = document.getElementById('tracks-fields'); //survey options
-const addMoreTracks = document.getElementById('add-more-tracks') //add more fields
+const tracksFieldsList = document.getElementById('tracks-fields');
+const addMoreTracks = document.getElementById('add-more-tracks');
+const playlistName = document.getElementById('add-playlist-name');
+const trackID = document.getElementById('add-tracks');
+const savePlaylist = document.getElementById('save-button');
+
+
+// playlistName.addEventListener('input', (event) => {
+//     let value = event.target.value;
+//     console.log(value);
+// })
+
+savePlaylist.onclick = function () {
+    console.log(playlistName.value);
+    console.log(trackID.value);
+}
+
 
 addMoreTracks.onclick = function () {
     var newField = document.createElement('input');
@@ -154,5 +169,5 @@ addMoreTracks.onclick = function () {
 }
 
 function createPlaylist() {
-    
+    fetch()
 }
