@@ -4,9 +4,19 @@ const path = require("path");
 const router = express.Router();
 const fs = require('fs');
 const csv = require('csv-parser');
+const Joi = require('joi');
 const cors = require('cors');
 const { parse } = require('path');
 app.use(cors())
+
+/**
+ * @TEST 
+ * testing mongodb 
+ */
+const dotenv = require('dotenv');
+const connectDB = require('./server/database/connection');
+dotenv.config({ path: 'config.env' })
+
 
 //serving front-end code
 app.use('/', express.static('static'));
@@ -17,12 +27,14 @@ const genreInfo = [];
 const albumInfo = [];
 const artistInfo = [];
 const playlists = [
-    { id: "1", name: "x", tracks: ["20", "2"] }
+    { name: "test", tracks: ["20", "2"] }
 ];
 
-// const playlists = [
-//     { id: "1", name: "x", trackID1 : "2", trackID2 : "20" }
-// ];
+/**
+ * @TEST mongo connection 
+ */
+connectDB();
+
 
 //functions to select specific properties
 function selectFewerGenreProps(show) {
@@ -159,31 +171,6 @@ app.get('/api/data/albums/:name', (req, res) => {
         res.status(404).send("Album was not found!");
     }
     console.log(album)
-
-    // const album = albumInfo.find(c => c.album_title === req.params.id);
-    // if (albumInfo) {
-    //     res.send(album);
-    //     res.send(`
-    //     <!DOCTYPE html>
-    //     <html>
-    //         <head>
-    //            <link rel="stylesheet" href="stylesheet.css">
-    //            <base?>
-    //         </head>
-    //         <body>
-    //             <p>Name: ${album.album_title}</p>
-    //             <p>ID: ${album.album_id}</p>
-    //             <p>Artist: ${album.artist_name}</p>
-    //             <p>Released: ${album.album_date_released}</p>
-    //             <p>Listens: ${album.album_listens}</p>                
-    //             <p>Website: ${album.album_url}</p>
-    //         </body>
-    //     </html>
-    //     `)
-    // } else {
-    //     res.status(404).send('Album was not found!');
-    // }
-    // console.log(album)
 });
 
 
@@ -244,6 +231,28 @@ router.put('/playlists/:name', (req, res) => {
     //add name
     newPlaylist.name = (req.params.name);
 
+    //input sanitization
+    const schema = Joi.object({
+        name: Joi.string()
+            .min(3)
+            .max(30)
+            .required(),
+
+        tracks: Joi.array().items(Joi.string()
+            .min(1)
+            .max(15)
+            .required()
+        )
+    });
+
+    const result = schema.validate(req.body);
+    console.log(result);
+
+    if (result.error) {
+        res.status(400).send(result.error.details[0].message);
+        return;
+    }
+
     //replace
     const playlist = playlists.find(p => p.name === (newPlaylist.name));
     if (!playlists.includes(playlist)) {
@@ -262,29 +271,45 @@ router.post('/playlists/:name', (req, res) => {
     const newPlaylist = req.body;
     console.log("Track Titles: ", newPlaylist)
 
+    //input sanitization
+    const schema = Joi.object({
+        tracks: Joi.array().items(Joi.string()
+            .min(1)
+            .max(15)
+            .required()
+        )
+    });
+
+    const result = schema.validate(req.body);
+    console.log(result);
+
+    if (result.error) {
+        res.status(400).send(result.error.details[0].message);
+        return;
+    }
+
     //find list
     const playlist = playlists.find(p => p.name === (req.params.name));
 
-    //replace
+    //update tracks
     if (!playlists.includes(playlist)) {
         res.status(404).send(`List ${req.params.name} not found!`)
     } else {
         console.log("Updating tracks for ", req.params.name);
 
-        //getting current tracks
-        var currTracks = [];
-        for (i = 0; i < playlist.tracks.length; i++) {
-            console.log(playlist.tracks.length)
-            currTracks[i] = playlist.tracks[i];
-        }
-        console.log("curr", currTracks)
+        // //getting current tracks
+        // var currTracks = [];
+        // for (i = 0; i < playlist.tracks.length; i++) {
+        //     console.log(playlist.tracks.length)
+        //     currTracks[i] = playlist.tracks[i];
+        // }
+        // console.log("curr", currTracks)
 
         var newTracks = [];
-        //newTracks.push(req.body.tracks)
         newTracks = req.body.tracks;
         console.log("new", newTracks)
         playlist.tracks.splice(0, playlist.tracks.length, ...newTracks)
-        
+
         res.send(req.body)
     }
 });
@@ -329,6 +354,18 @@ router.get('/playlists', (req, res) => {
     res.send(playlists);
 });
 
+
+
+
+
+
+/**
+ * @TEST 
+ * testing mongodb api stuff 
+ */
+const controller = require('./server/controller/controller');
+router.post('/playlists-test', controller.create);
+//
 
 app.use('/api/data', router)
 
