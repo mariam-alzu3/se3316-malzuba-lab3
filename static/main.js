@@ -168,6 +168,29 @@ addMoreTracks.onclick = function () {
     tracksFieldsList.appendChild(newField);
 }
 
+//load playlists onto homepage
+function getPlaylists() {
+    const list = document.getElementById('playlists');               //list to store in artists names
+    let results = [];
+    console.log(results)
+    clearList(list);
+    fetch('/api/data/playlists-test')
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+
+            data.forEach(e => {
+                const item = document.createElement('a')
+                item.classList.add('playlist-list-item')
+                item.appendChild(document.createTextNode(`${e.name}`));
+                list.appendChild(item);
+            });
+        })
+}
+
+getPlaylists();
+
+
 function createPlaylist() {
     fetch()
 }

@@ -13,9 +13,11 @@ app.use(cors())
  * @TEST 
  * testing mongodb 
  */
+const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const connectDB = require('./server/database/connection');
 dotenv.config({ path: 'config.env' })
+app.use(bodyParser.json());
 
 
 //serving front-end code
@@ -297,14 +299,6 @@ router.post('/playlists/:name', (req, res) => {
     } else {
         console.log("Updating tracks for ", req.params.name);
 
-        // //getting current tracks
-        // var currTracks = [];
-        // for (i = 0; i < playlist.tracks.length; i++) {
-        //     console.log(playlist.tracks.length)
-        //     currTracks[i] = playlist.tracks[i];
-        // }
-        // console.log("curr", currTracks)
-
         var newTracks = [];
         newTracks = req.body.tracks;
         console.log("new", newTracks)
@@ -363,9 +357,38 @@ router.get('/playlists', (req, res) => {
  * @TEST 
  * testing mongodb api stuff 
  */
+var PlaylistDB = require('./server/model/model')
+
 const controller = require('./server/controller/controller');
 router.post('/playlists-test', controller.create);
-//
+
+
+router.get('/playlists-test', (req, res) => {
+    if (!req.query.name) {
+        PlaylistDB.find()
+            .then(playlist => {
+                res.send(playlist)
+            })
+            .catch(err => {
+                res.status(500).send({ message: err.message || "Error Occurred while retriving user information" })
+            })
+        //return res.status(400).send('Missing URL parameter: name')
+    } else {
+
+        PlaylistDB.findOne({
+            name: req.query.name
+        })
+            .then(doc => {
+                res.json(doc)
+            })
+            .catch(err => {
+                res.status(500).json(err)
+            })
+    }
+})
+
+
+
 
 app.use('/api/data', router)
 

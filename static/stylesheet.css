@@ -60,6 +60,7 @@ body {
     font-weight: 500;
     font-size: 1em;
     width: 80%;
+    display: block;
 }
 
 .playlist a:hover {
