@@ -326,7 +326,6 @@ router.get('/playlists/:name', (req, res) => {
         console.log("not found")
         res.status(404).send(`Playlist "${req.params.name}" was not found!`);
     }
-
 });
 
 //9. delete playlist by name
@@ -361,6 +360,7 @@ var PlaylistDB = require('./server/model/model')
 
 const controller = require('./server/controller/controller');
 router.post('/playlists-test', controller.create);
+//router.put('/playlists-test/:name', controller.update);
 
 
 router.get('/playlists-test', (req, res) => {
@@ -388,7 +388,54 @@ router.get('/playlists-test', (req, res) => {
 })
 
 
+// UPDATE
+router.put('/playlists-test/:name', (req, res) => {
+    // if (!req.params.name) {
+    //     return res.status(400).send('Missing URL parameter: name')
+    // } else if (!req.body) {
+    //     return res
+    //         .status(400)
+    //         .send({ message: "Data to update can not be empty" })
+    // }
 
+
+    PlaylistDB.findOneAndUpdate({
+        name: req.params.name
+    }, req.body, {
+        new: true
+    })
+        .then(doc => {
+            if (!doc) {
+                res.status(404).send({ message: `Playlist does not exist!` })
+            } else {
+                res.json(doc)
+            }
+        })
+        .catch(err => {
+            res.status(500).json(err)
+        })
+})
+
+// DELETE
+router.delete('/playlists-test/:name', (req, res) => {
+    if (!req.params.name) {
+        return res.status(400).send('Missing URL parameter: name')
+    }
+
+    PlaylistDB.findOneAndRemove({
+        name: req.params.name
+    })
+        .then(doc => {
+            if (!doc) {
+                res.status(404).send({ message: `Playlist does not exist!` })
+            } else {
+                res.json(doc)
+            }
+        })
+        .catch(err => {
+            res.status(500).json(err)
+        })
+})
 
 app.use('/api/data', router)
 

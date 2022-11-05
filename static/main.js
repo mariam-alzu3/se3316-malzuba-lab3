@@ -180,8 +180,12 @@ function getPlaylists() {
             console.log(data);
 
             data.forEach(e => {
-                const item = document.createElement('a')
+                const item = document.createElement('button')
+                item.id = "playlist-list-item"
                 item.classList.add('playlist-list-item')
+                // item.setAttribute('id', 'playlist-btn')
+                item.setAttribute('type', 'button')
+                // item.setAttribute('href', '')
                 item.appendChild(document.createTextNode(`${e.name}`));
                 list.appendChild(item);
             });
@@ -190,7 +194,10 @@ function getPlaylists() {
 
 getPlaylists();
 
+//(event listener not working)
+const btntest = document.getElementById('playlist-list-item')
+btntest.addEventListener('click', something)
 
-function createPlaylist() {
-    fetch()
+function something() {
+    console.log('fff')
 }

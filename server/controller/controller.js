@@ -10,7 +10,6 @@ exports.create = (req, res) => {
     // new playlist
     const playlist = new PlaylistDB({
         name: req.body.name,
-        //tracks: [req.body.tracks]
         tracks: req.body.tracks
     })
 
@@ -18,7 +17,6 @@ exports.create = (req, res) => {
         .save(playlist)
         .then(data => {
             res.send(data)
-            //res.redirect('/add-user');
         })
         .catch(err => {
             res.status(500).send({
