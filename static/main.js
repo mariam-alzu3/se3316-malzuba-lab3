@@ -168,6 +168,30 @@ addMoreTracks.onclick = function () {
     tracksFieldsList.appendChild(newField);
 }
 
+//create
+function createPlaylist() {
+    const createdPlaylist = { name: playlistName.value, tracks: [trackID.value] }
+
+    fetch(`/api/data/playlists-test`, {
+        method: "POST",
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify(createdPlaylist)
+    })
+    .then(res => {
+        if(res.ok){
+            res.json()
+        } else {
+            console.log("Error: ", res.status);
+        }
+        return res;
+    })
+    .then(data => console.log(data))
+    .catch(error => console.log(error))
+
+}
+
+savePlaylist.addEventListener('click', createPlaylist);
+
 //load playlists onto homepage
 function getPlaylists() {
     const list = document.getElementById('playlists');               //list to store in artists names
