@@ -80,8 +80,6 @@ function loadAlbums() {
                 const item = document.createElement('li')
                 item.classList.add('search-list-item')
                 item.appendChild(document.createTextNode(`${e.album_title}`));
-                //const artistInfo = document.createTextNode("Name " + e.artist_name)
-                //item.appendChild(artistInfo);
                 list.appendChild(item);
             });
         })
@@ -108,8 +106,6 @@ function loadTracks() {
                 const item = document.createElement('li')
                 item.classList.add('search-list-item')
                 item.appendChild(document.createTextNode(`${e.track_title}`));
-                //const artistInfo = document.createTextNode("Name " + e.artist_name)
-                //item.appendChild(artistInfo);
                 list.appendChild(item);
             });
         })
@@ -125,10 +121,10 @@ document.getElementById('search-track-button').addEventListener('click', loadTra
 document.getElementById('search-album-button').addEventListener('click', loadAlbums);
 document.getElementById('search-artist-button').addEventListener('click', loadArtists);
 
-//create playlist
 
+//CREATE PLAYLIST
 const popup = document.querySelector("#popup");                     //pop-up
-const openPopUP = document.getElementById("create-playlist");           //search button to open the popup
+const openPopUP = document.getElementById("create-playlist");       //search button to open the popup
 const closePopUp = document.querySelector(".close-button");         //exit button closes the popup
 const addMoreTrack = document.getElementById('add-more-tracks')
 
@@ -146,11 +142,6 @@ const playlistName = document.getElementById('add-playlist-name');
 const trackID = document.getElementById('add-tracks');
 const savePlaylist = document.getElementById('save-button');
 
-
-// playlistName.addEventListener('input', (event) => {
-//     let value = event.target.value;
-//     console.log(value);
-// })
 
 savePlaylist.onclick = function () {
     console.log(playlistName.value);
@@ -172,7 +163,7 @@ addMoreTracks.onclick = function () {
 function createPlaylist() {
     const createdPlaylist = { name: playlistName.value, tracks: [trackID.value] }
 
-    fetch(`/api/data/playlists-test`, {
+    fetch(`/api/data/playlist`, {
         method: "POST",
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify(createdPlaylist)
@@ -192,25 +183,29 @@ function createPlaylist() {
 
 savePlaylist.addEventListener('click', createPlaylist);
 
+
 //load playlists onto homepage
 function getPlaylists() {
     const list = document.getElementById('playlists');               //list to store in artists names
     let results = [];
     console.log(results)
     clearList(list);
-    fetch('/api/data/playlists-test')
+    fetch('/api/data/playlist')
         .then(res => res.json())
         .then(data => {
             console.log(data);
 
             data.forEach(e => {
-                const item = document.createElement('button')
+                const item = document.createElement('li')
+                const link = document.createElement('a')
                 item.id = "playlist-list-item"
                 item.classList.add('playlist-list-item')
-                // item.setAttribute('id', 'playlist-btn')
-                item.setAttribute('type', 'button')
-                // item.setAttribute('href', '')
-                item.appendChild(document.createTextNode(`${e.name}`));
+
+                link.setAttribute('id', 'list-name')
+                link.setAttribute('href', '#')
+                item.appendChild(link)
+
+                link.appendChild(document.createTextNode(`${e.name}`));
                 list.appendChild(item);
             });
         })
@@ -218,13 +213,44 @@ function getPlaylists() {
 
 getPlaylists();
 
-//(event listener not working)
-// const btntest = document.getElementById('playlist-list-item')
-// btntest.addEventListener('click', something)
 
-// function something() {
-//     console.log('fff')
-// }
+function loadPlaylistInfo() {
+    const list = document.getElementById('info')
+    const listName = document.getElementById('list-name')
+    console.log(listName.textContent)
+    clearList(list);
+    fetch(`/api/data/playlist?name=${listName.textContent}`)
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+
+            const item = document.createElement('li')
+            item.classList.add('info-item')
+            item.appendChild(document.createTextNode(`${data.name}`));
+            item.appendChild(document.createTextNode("\n" + `${data.tracks}`));
+            console.log(`${data.name}`);
+            console.log(`${data.tracks}`);
+            list.appendChild(item);
+        })
+}
+
+
+const infoPopup = document.getElementById("playlist-info-popup");                     //pop-up
+const closeInfo = document.getElementById("exit-info-button");         //exit button closes the popup
+
+//click on playlist to view information
+document.getElementById("playlists").addEventListener("click", function (e) {
+    if (e.target && e.target.matches("li.playlist-list-item")) {
+        //e.target.className = "foo"; // new class name here
+        //alert("clicked " + e.target.innerText);
+        infoPopup.showModal();
+        loadPlaylistInfo();
+    }
+});
+
+closeInfo.addEventListener("click", () => {
+    infoPopup.close();                                                  //clicking the exit button closes the popup
+});
 
 //DELETE PLAYLIST
 const delPopup = document.getElementById("delete-playlist-popup");                     //pop-up
@@ -242,7 +268,7 @@ closeBtn.addEventListener("click", () => {
 function deletePlaylist() {
     const deletePlaylistName = document.getElementById('delete-playlist-name');
 
-    fetch(`/api/data/playlists-test/${deletePlaylistName.value}`, {
+    fetch(`/api/data/playlist/${deletePlaylistName.value}`, {
         method: "DELETE",
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify(deletePlaylistName)

@@ -359,11 +359,11 @@ router.get('/playlists', (req, res) => {
 var PlaylistDB = require('./server/model/model')
 
 const controller = require('./server/controller/controller');
-router.post('/playlists-test', controller.create);
+router.post('/playlist', controller.create);
 //router.put('/playlists-test/:name', controller.update);
 
 
-router.get('/playlists-test', (req, res) => {
+router.get('/playlist', (req, res) => {
     if (!req.query.name) {
         PlaylistDB.find()
             .then(playlist => {
@@ -389,7 +389,7 @@ router.get('/playlists-test', (req, res) => {
 
 
 // UPDATE
-router.put('/playlists-test/:name', (req, res) => {
+router.put('/playlist/:name', (req, res) => {
     // if (!req.params.name) {
     //     return res.status(400).send('Missing URL parameter: name')
     // } else if (!req.body) {
@@ -417,7 +417,7 @@ router.put('/playlists-test/:name', (req, res) => {
 })
 
 // DELETE
-router.delete('/playlists-test/:name', (req, res) => {
+router.delete('/playlist/:name', (req, res) => {
     if (!req.params.name) {
         return res.status(400).send('Missing URL parameter: name')
     }

@@ -17,17 +17,6 @@
                 <span class="title">Lab 3</span>
             </div>
             <div class="search">
-                <!-- <form action="/api/data/genre" method="GET" class="search-box">
-                    <input type="text" class="form-control" maxlength="20" placeholder="Search by Track..."
-                        id="search-genre" name="searchterm">
-                    <button type="submit" class="btn">Submit</button>
-                </form>
-
-                <form action="/api/data/album" method="GET" class="search-box">
-                    <input type="text" class="form-control" maxlength="20" placeholder="Search by Album..."
-                        id="search-album" name="searchterm2">
-                    <button type="submit" class="btn">Submit</button>
-                </form> -->
 
                 <form class="search-box">
                     <input type="text" class="form-control" maxlength="20" placeholder="Search by Track..."
@@ -51,7 +40,6 @@
             </div>
             <div class="playlist">
                 <p>My Playlists</p>
-                <!-- <h5>Create Playlist</h5> -->
                 <button type="button" class="create-playlist" id="create-playlist">Create Playlist</button>
                 <ul class="playlists-group" id="playlists"></ul>
                 <button type="button" class="delete-playlist" id="delete-playlist">Delete Playlist</button>
@@ -88,6 +76,14 @@
             </dialog>
         </div>
 
+        <div class="playlist-info-form" id="playlist-info-form">
+            <dialog class="popup" id="playlist-info-popup">
+                <p>Playlist name:</p>
+                <ul class="info" id="info"></ul>
+                <button id="exit-info-button" class="button close-button">Exit</button>
+            </dialog>
+        </div>
+
         <div class="songs-container" id="songs" style="overflow-y: scroll; height:820px;">
             <div>
                 <table class='table' id="table">
@@ -109,7 +105,6 @@
         <!-- <button class="artist-btn" id="artist-btn" type="button">SEARCH ARTIST
             <a href="/results.html">search</a>
         </button> -->
-
         <ul class="list-group" id="list"></ul>
     </div>
 
