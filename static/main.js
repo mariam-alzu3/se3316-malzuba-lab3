@@ -177,16 +177,16 @@ function createPlaylist() {
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify(createdPlaylist)
     })
-    .then(res => {
-        if(res.ok){
-            res.json()
-        } else {
-            console.log("Error: ", res.status);
-        }
-        return res;
-    })
-    .then(data => console.log(data))
-    .catch(error => console.log(error))
+        .then(res => {
+            if (res.ok) {
+                res.json()
+            } else {
+                console.log("Error: ", res.status);
+            }
+            return res;
+        })
+        .then(data => console.log(data))
+        .catch(error => console.log(error))
 
 }
 
@@ -219,9 +219,44 @@ function getPlaylists() {
 getPlaylists();
 
 //(event listener not working)
-const btntest = document.getElementById('playlist-list-item')
-btntest.addEventListener('click', something)
+// const btntest = document.getElementById('playlist-list-item')
+// btntest.addEventListener('click', something)
 
-function something() {
-    console.log('fff')
+// function something() {
+//     console.log('fff')
+// }
+
+//DELETE PLAYLIST
+const delPopup = document.getElementById("delete-playlist-popup");                     //pop-up
+const openBtn = document.getElementById("delete-playlist");           //search button to open the popup
+const closeBtn = document.getElementById("exit-delete-button");         //exit button closes the popup
+
+openBtn.addEventListener("click", () => {                         //clicking the search button shows the popup
+    delPopup.showModal();
+});
+
+closeBtn.addEventListener("click", () => {
+    delPopup.close();                                                  //clicking the exit button closes the popup
+});
+
+function deletePlaylist() {
+    const deletePlaylistName = document.getElementById('delete-playlist-name');
+
+    fetch(`/api/data/playlists-test/${deletePlaylistName.value}`, {
+        method: "DELETE",
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify(deletePlaylistName)
+    })
+        .then(res => {
+            if (res.ok) {
+                res.json()
+            } else {
+                console.log("Error: ", res.status);
+            }
+            return res;
+        })
+        .then(data => console.log(data))
+        .catch(error => console.log(error))
 }
+
+document.getElementById('delete-button').addEventListener('click', deletePlaylist);

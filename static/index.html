@@ -54,28 +54,39 @@
                 <!-- <h5>Create Playlist</h5> -->
                 <button type="button" class="create-playlist" id="create-playlist">Create Playlist</button>
                 <ul class="playlists-group" id="playlists"></ul>
+                <button type="button" class="delete-playlist" id="delete-playlist">Delete Playlist</button>
             </div>
         </div>
 
-        
-            <div class="playlist-form" id="playlist-form">
-                <dialog class="popup" id="popup">
-                    <p>Playlist name:</p>
-                    <input type="text" class="form-control" maxlength="20" placeholder="Add a name "
-                        id="add-playlist-name">
 
-                    <p>Tracks:</p>
-                    <div id="tracks-fields">
-                        <input type="text" class="form-control" maxlength="20" placeholder="Add a track ID "
-                            id="add-tracks">
-                    </div>
+        <div class="playlist-form" id="playlist-form">
+            <dialog class="popup" id="popup">
+                <p>Playlist name:</p>
+                <input type="text" class="form-control" maxlength="20" placeholder="Add a name " id="add-playlist-name">
 
-                    <button id="exit-button" class="button close-button">Exit</button>
-                    <button type="submit" id="save-button" class="save-button">Save</button>
-                    <button id="add-more-tracks" class="add-more-tracks">+</button>
-                </dialog>
-            </div>
+                <p>Tracks:</p>
+                <div id="tracks-fields">
+                    <input type="text" class="form-control" maxlength="20" placeholder="Add a track ID "
+                        id="add-tracks">
+                </div>
 
+                <button id="exit-button" class="button close-button">Exit</button>
+                <button type="submit" id="save-button" class="save-button">Save</button>
+                <button id="add-more-tracks" class="add-more-tracks">+</button>
+            </dialog>
+        </div>
+
+
+        <div class="delete-form" id="delete-form">
+            <dialog class="popup" id="delete-playlist-popup">
+                <p>Playlist name:</p>
+                <input type="text" class="form-control" maxlength="20" placeholder="Add a name "
+                    id="delete-playlist-name">
+
+                <button id="exit-delete-button" class="button close-button">Exit</button>
+                <button type="submit" id="delete-button" class="delete-button">Delete</button>
+            </dialog>
+        </div>
 
         <div class="songs-container" id="songs" style="overflow-y: scroll; height:820px;">
             <div>
