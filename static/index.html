@@ -10,7 +10,6 @@
 </head>
 
 <body>
-
     <div class="container">
         <div class="sidebar">
             <div class="logo">
@@ -32,9 +31,8 @@
 
                 <form action="results.html" class="search-box">
                     <input type="text" class="form-control" maxlength="20" placeholder="Search by Artist..."
-                        id="search-artist" name="searchterm3" onclick="passValues()">
+                        id="search-artist" name="searchterm3">
                     <button type="button" class="btn" id="search-artist-button">Search
-                        <a href="/results.html">search</a>
                     </button>
                 </form>
             </div>
@@ -85,12 +83,15 @@
         </div>
 
         <div class="search-container">
-            <!-- <button class="artist-btn" id="artist-btn" type="button">SEARCH ARTIST
-                <a href="/results.html">search</a>
-            </button> -->
+            <!-- <dialog class="popup" id="search-result-pop">
+                <p>Results</p>
+                <ul class="list-group" id="list"></ul>
+                <button id="exit-results" class="button close-button">Exit</button>
+            </dialog> -->
+
             <ul class="list-group" id="list"></ul>
         </div>
-        
+
         <div class="songs-container" id="songs" style="overflow-y: scroll; height:820px;">
             <div>
                 <table class='table' id="table">
@@ -106,22 +107,6 @@
             <input type="button" id="seeMoreRecords" value="View More Tracks">
         </div>
     </div>
-
-
-    <div class="search-container">
-        <!-- <button class="artist-btn" id="artist-btn" type="button">SEARCH ARTIST
-            <a href="/results.html">search</a>
-        </button> -->
-        <ul class="list-group" id="list"></ul>
-    </div>
-
-    <script>
-        function passValues() {
-            var list = document.getElementById('list').getAttribute('value');
-            localStorage.setItem('textvalue', list);
-            return false;
-        }
-    </script>
 
     <!-- Embedded JavaScript go here -->
     <script src="main.js"></script>

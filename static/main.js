@@ -79,8 +79,6 @@ function loadArtists() {
                 const item = document.createElement('li')
                 item.classList.add('search-list-item')
                 item.appendChild(document.createTextNode(`${e.artist_name}`));
-                //const artistInfo = document.createTextNode("Name " + e.artist_name)
-                //item.appendChild(artistInfo);
                 list.appendChild(item);
             });
         })
@@ -143,6 +141,34 @@ function clearList(element) {                                      //clears the 
         element.removeChild(element.firstChild);
     }
 }
+
+// const resultsPopup = document.getElementById("search-result-pop");                     //pop-up
+// const tracksResults = document.getElementById("search-track-button");       //search button to open the popup
+// const albumsResults = document.getElementById("search-track-button");       //search button to open the popup
+// const artistsResults = document.getElementById("search-track-button");       //search button to open the popup
+
+// const closeResults = document.getElementById("exit-results");         //exit button closes the popup
+
+// tracksResults.addEventListener("click", () => {
+//     resultsPopup.showModal();
+//     loadTracks();
+// })
+
+// albumsResults.addEventListener("click", () => {
+//     resultsPopup.showModal();
+//     loadAlbums();
+// })
+
+
+// artistsResults.addEventListener("click", () => {
+//     resultsPopup.showModal();
+//     loadArtists();
+// })
+
+
+// closeResults.addEventListener("click", () => {
+//     resultsPopup.close();
+// })
 
 document.getElementById('search-track-button').addEventListener('click', loadTracks);
 document.getElementById('search-album-button').addEventListener('click', loadAlbums);

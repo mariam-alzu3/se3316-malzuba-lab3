@@ -241,6 +241,7 @@ input#seeMoreRecords {
 
 #list {
     color: white;
+    list-style: none;
 }
 
 
