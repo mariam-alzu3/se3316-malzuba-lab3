@@ -8,11 +8,6 @@ const Joi = require('joi');
 const cors = require('cors');
 const { parse } = require('path');
 app.use(cors())
-
-/**
- * @TEST 
- * testing mongodb 
- */
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const connectDB = require('./server/database/connection');
@@ -32,10 +27,7 @@ const playlists = [
     { name: "test", tracks: ["20", "2"] }
 ];
 
-/**
- * @TEST mongo connection 
- */
-connectDB();
+connectDB(); //connects to mongodb
 
 
 //functions to select specific properties
@@ -131,7 +123,7 @@ router.get('/artists', (req, res) => {
 });
 
 //1. get genre info by genre ID
-app.get('/api/data/genres/:id', (req, res) => {
+app.get('/api/data/genres/:id([0-9]{1}|[0-9]{2}|[0-9]{3}|[0-9]{4})', (req, res) => {
     var newGenre = genreInfo.map(selectFewerGenreProps)
     const genre = newGenre.find(g => g.genre_id === (req.params.id))
     res.send(genre)
@@ -139,7 +131,7 @@ app.get('/api/data/genres/:id', (req, res) => {
 
 
 //2. get artist info by artist ID
-app.get('/api/data/artists/:id', (req, res) => {
+app.get('/api/data/artists/:id([0-9]{1}|[0-9]{2}|[0-9]{3}|[0-9]{4}|[0-9]{5})', (req, res) => {
     var newArtist = artistInfo.map(selectFewerArtistProps)
     const artist = newArtist.find(a => a.artist_id === (req.params.id))
     if (newArtist) {
@@ -152,7 +144,7 @@ app.get('/api/data/artists/:id', (req, res) => {
 
 
 //3. get track information by track ID
-app.get('/api/data/tracks/:id', (req, res) => {
+app.get('/api/data/tracks/:id([0-9]{1}|[0-9]{2}|[0-9]{3}|[0-9]{4}|[0-9]{5}|[0-9]{6})', (req, res) => {
     var newTrack = trackInfo.map(selectFewerTrackProps)
     const track = newTrack.find(t => t.track_id === (req.params.id))
     if (newTrack) {
@@ -164,7 +156,7 @@ app.get('/api/data/tracks/:id', (req, res) => {
 });
 
 //4. get album info by album name
-app.get('/api/data/albums/:name', (req, res) => {
+app.get('/api/data/albums/:name([a-zA-Z]+)', (req, res) => {
     var newAlbum = albumInfo.map(selectFewerAlbumProps)
     const album = newAlbum.find(al => al.album_title === (req.params.name))
     if (newAlbum) {
@@ -177,7 +169,7 @@ app.get('/api/data/albums/:name', (req, res) => {
 
 
 //4. get tracks IDs from track title
-app.get('/api/data/tracks-title/:name', (req, res) => {
+app.get('/api/data/tracks-title/:name([0-9a-zA-Z]+)', (req, res) => {
     var newTrack = trackInfo.map(selectFewerTrackTitleProps)
     const track = newTrack.filter(t => t.track_title.toLowerCase() === (req.params.name.toLowerCase())).slice(0, 11)
     //const {track_title, ...rest} = track;
@@ -192,7 +184,7 @@ app.get('/api/data/tracks-title/:name', (req, res) => {
 
 
 //4. get track IDs from album title
-app.get('/api/data/albums-title/:name', (req, res) => {
+app.get('/api/data/albums-title/:name([0-9a-zA-Z]+)', (req, res) => {
     var tracksFromAlbum = trackInfo.map(selectFewerAlbumTracksProps)
     const tracks = tracksFromAlbum.filter(a => a.album_title.toLowerCase() === (req.params.name.toLowerCase())).slice(0, 11)
     if (tracksFromAlbum) {
@@ -205,7 +197,7 @@ app.get('/api/data/albums-title/:name', (req, res) => {
 
 
 //5. artists IDs from artist name
-app.get('/api/data/artist-name/:name', (req, res) => {
+app.get('/api/data/artist-name/:name([0-9a-zA-Z]+)', (req, res) => {
     var newArtistArr = artistInfo.map((data) => {
         return {
             'artist_name': data.artist_name,
@@ -216,8 +208,6 @@ app.get('/api/data/artist-name/:name', (req, res) => {
     const artistIDs = newArtistArr.filter(a => a.artist_name.toLowerCase() === req.params.name.toLowerCase());
 
     if (artistIDs) {
-        // const { artist_name, ...rest } = artistIDs;
-        // res.send(rest)
         res.send(artistIDs);
     } else {
         res.status(404).send(`Artist "${req.params.name}" was not found!`);
@@ -226,128 +216,126 @@ app.get('/api/data/artist-name/:name', (req, res) => {
 });
 
 
-//6. create new playlist
-router.put('/playlists/:name', (req, res) => {
-    const newPlaylist = req.body;
-    console.log("Playlist Name: ", newPlaylist)
-    //add name
-    newPlaylist.name = (req.params.name);
+// //6. create new playlist
+// router.put('/playlists/:name', (req, res) => {
+//     const newPlaylist = req.body;
+//     console.log("Playlist Name: ", newPlaylist)
+//     //add name
+//     newPlaylist.name = (req.params.name);
 
-    //input sanitization
-    const schema = Joi.object({
-        name: Joi.string()
-            .min(3)
-            .max(30)
-            .required(),
+//     //input sanitization
+//     const schema = Joi.object({
+//         name: Joi.string()
+//             .min(3)
+//             .max(30)
+//             .required(),
 
-        tracks: Joi.array().items(Joi.string()
-            .min(1)
-            .max(15)
-            .required()
-        )
-    });
+//         tracks: Joi.array().items(Joi.string()
+//             .min(1)
+//             .max(15)
+//             .required()
+//         )
+//     });
 
-    const result = schema.validate(req.body);
-    console.log(result);
+//     const result = schema.validate(req.body);
+//     console.log(result);
 
-    if (result.error) {
-        res.status(400).send(result.error.details[0].message);
-        return;
-    }
+//     if (result.error) {
+//         res.status(400).send(result.error.details[0].message);
+//         return;
+//     }
 
-    //replace
-    const playlist = playlists.find(p => p.name === (newPlaylist.name));
-    if (!playlists.includes(playlist)) {
-        console.log("creating new playlist")
-        playlists.push(newPlaylist);
-    } else {
-        console.log("Playlist already exists");
-        res.status(404).send(`Playlist "${req.params.name}" already exists!`);
-    }
-    res.send(newPlaylist);
-});
-
-
-//7. update tracks in a list
-router.post('/playlists/:name', (req, res) => {
-    const newPlaylist = req.body;
-    console.log("Track Titles: ", newPlaylist)
-
-    //input sanitization
-    const schema = Joi.object({
-        tracks: Joi.array().items(Joi.string()
-            .min(1)
-            .max(15)
-            .required()
-        )
-    });
-
-    const result = schema.validate(req.body);
-    console.log(result);
-
-    if (result.error) {
-        res.status(400).send(result.error.details[0].message);
-        return;
-    }
-
-    //find list
-    const playlist = playlists.find(p => p.name === (req.params.name));
-
-    //update tracks
-    if (!playlists.includes(playlist)) {
-        res.status(404).send(`List ${req.params.name} not found!`)
-    } else {
-        console.log("Updating tracks for ", req.params.name);
-
-        var newTracks = [];
-        newTracks = req.body.tracks;
-        console.log("new", newTracks)
-        playlist.tracks.splice(0, playlist.tracks.length, ...newTracks)
-
-        res.send(req.body)
-    }
-});
+//     //replace
+//     const playlist = playlists.find(p => p.name === (newPlaylist.name));
+//     if (!playlists.includes(playlist)) {
+//         console.log("creating new playlist")
+//         playlists.push(newPlaylist);
+//     } else {
+//         console.log("Playlist already exists");
+//         res.status(404).send(`Playlist "${req.params.name}" already exists!`);
+//     }
+//     res.send(newPlaylist);
+// });
 
 
-//8. get tracks IDs from list
-router.get('/playlists/:name', (req, res) => {
-    var newTrackList = playlists.map((data) => {
-        return {
-            'name': data.name,
-            'tracks': data.tracks
-        }
-    });
+// //7. update tracks in a list
+// router.post('/playlists/:name', (req, res) => {
+//     const newPlaylist = req.body;
+//     console.log("Track Titles: ", newPlaylist)
 
-    if (trackList = newTrackList.find(t => t.name === req.params.name)) {
-        const { name, ...rest } = trackList;
-        res.send(rest)
-        console.log(rest)
-    } else {
-        console.log("not found")
-        res.status(404).send(`Playlist "${req.params.name}" was not found!`);
-    }
-});
+//     //input sanitization
+//     const schema = Joi.object({
+//         tracks: Joi.array().items(Joi.string()
+//             .min(1)
+//             .max(15)
+//             .required()
+//         )
+//     });
 
-//9. delete playlist by name
-router.delete('/playlists/:name', (req, res) => {
-    let listName = req.params.name;
-    let index = playlists.findIndex(i => i.name === listName);
+//     const result = schema.validate(req.body);
+//     console.log(result);
 
-    if (index >= 0) {
-        let deletedList = playlists.splice(index, 1);
-        res.send(deletedList);
-    } else {
-        res.status(404).send(`Playlist "${req.params.name}" does not exist!`);
-    }
-});
+//     if (result.error) {
+//         res.status(400).send(result.error.details[0].message);
+//         return;
+//     }
+
+//     //find list
+//     const playlist = playlists.find(p => p.name === (req.params.name));
+
+//     //update tracks
+//     if (!playlists.includes(playlist)) {
+//         res.status(404).send(`List ${req.params.name} not found!`)
+//     } else {
+//         console.log("Updating tracks for ", req.params.name);
+
+//         var newTracks = [];
+//         newTracks = req.body.tracks;
+//         console.log("new", newTracks)
+//         playlist.tracks.splice(0, playlist.tracks.length, ...newTracks)
+
+//         res.send(req.body)
+//     }
+// });
 
 
-//10. get playlists (not done)
-router.get('/playlists', (req, res) => {
-    res.send(playlists);
-});
+// //8. get tracks IDs from list
+// router.get('/playlists/:name', (req, res) => {
+//     var newTrackList = playlists.map((data) => {
+//         return {
+//             'name': data.name,
+//             'tracks': data.tracks
+//         }
+//     });
+
+//     if (trackList = newTrackList.find(t => t.name === req.params.name)) {
+//         const { name, ...rest } = trackList;
+//         res.send(rest)
+//         console.log(rest)
+//     } else {
+//         console.log("not found")
+//         res.status(404).send(`Playlist "${req.params.name}" was not found!`);
+//     }
+// });
+
+// //9. delete playlist by name
+// router.delete('/playlists/:name', (req, res) => {
+//     let listName = req.params.name;
+//     let index = playlists.findIndex(i => i.name === listName);
+
+//     if (index >= 0) {
+//         let deletedList = playlists.splice(index, 1);
+//         res.send(deletedList);
+//     } else {
+//         res.status(404).send(`Playlist "${req.params.name}" does not exist!`);
+//     }
+// });
 
 
+// //10. get playlists (not done)
+// router.get('/playlists', (req, res) => {
+//     res.send(playlists);
+// });
 
 
 
@@ -358,15 +346,61 @@ router.get('/playlists', (req, res) => {
  */
 var PlaylistDB = require('./server/model/model')
 
-const controller = require('./server/controller/controller');
-router.post('/playlist', controller.create);
-//router.put('/playlists-test/:name', controller.update);
+// CREATE
+router.post('/playlist', (req, res) => {
+    if (!req.body) {
+        res.status(400).send({ message: "Content can not be emtpy!" });
+        return;
+    }
 
+    //input sanitization
+    const schema = Joi.object({
+        name: Joi.string().regex(/^[a-zA-Z0-9_.-]*$/)
+            .min(3)
+            .max(30)
+            .required(),
 
+        tracks: Joi.array().items(Joi.string()
+            .min(1)
+            .required()
+        )
+    });
+
+    const result = schema.validate(req.body);
+    console.log(result);
+
+    if (result.error) {
+        res.status(400).send(result.error.details[0].message);
+        return;
+    }
+
+    // new playlist
+    const playlist = new PlaylistDB({
+        name: req.body.name,
+        tracks: req.body.tracks
+    })
+
+    playlist
+        .save(playlist)
+        .then(data => {
+            res.send(data)
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Some error occurred while creating a create operation"
+            });
+        });
+})
+
+//FIND
 router.get('/playlist', (req, res) => {
     if (!req.query.name) {
         PlaylistDB.find()
             .then(playlist => {
+                playlist.forEach(e => {
+                    numOfTracks = e.tracks.length;
+                    console.log(numOfTracks)
+                })
                 res.send(playlist)
             })
             .catch(err => {
@@ -389,15 +423,35 @@ router.get('/playlist', (req, res) => {
 
 
 // UPDATE
-router.put('/playlist/:name', (req, res) => {
-    // if (!req.params.name) {
-    //     return res.status(400).send('Missing URL parameter: name')
-    // } else if (!req.body) {
-    //     return res
-    //         .status(400)
-    //         .send({ message: "Data to update can not be empty" })
-    // }
+router.put('/playlist/:name([0-9a-zA-Z]+)', (req, res) => {
+    if (!req.params.name) {
+        return res.status(400).send('Missing URL parameter: name')
+    } else if (!req.body) {
+        return res
+            .status(400)
+            .send({ message: "Data to update can not be empty" })
+    }
 
+    if (!req.body) {
+        res.send({ message: 'Cannot be empty!' })
+    }
+
+    //input sanitization
+    const schema = Joi.object({
+        tracks: Joi.array().items(Joi.string()
+            .min(1)
+            .required()
+            .regex(/^[0-9]*$/)
+        )
+    });
+
+    const result = schema.validate(req.body);
+    console.log(result);
+
+    if (result.error) {
+        res.status(400).send(result.error.details[0].message);
+        return;
+    }
 
     PlaylistDB.findOneAndUpdate({
         name: req.params.name
@@ -417,7 +471,7 @@ router.put('/playlist/:name', (req, res) => {
 })
 
 // DELETE
-router.delete('/playlist/:name', (req, res) => {
+router.delete('/playlist/:name([0-9a-zA-Z]+)', (req, res) => {
     if (!req.params.name) {
         return res.status(400).send('Missing URL parameter: name')
     }

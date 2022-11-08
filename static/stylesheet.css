@@ -17,7 +17,7 @@ body {
 
 .sidebar{
     background: linear-gradient(to bottom, #33144d, #303030, #151515);
-    width: 12vw;
+    width: 15vw;
     padding: 16px;
 }
 
@@ -191,34 +191,6 @@ button#add-more-tracks {
 };
 
 
-button#delete-button {
-    border: 0;
-    cursor: pointer;
-    font-weight: 700;
-    padding: var(--size-2) var(--size-4);
-    background: #33144d;
-    height: 40px;
-    width: 68px;
-    border-radius: 20%;
-    font-size: 15px;
-    color: rgb(133, 85, 211);
-    transform: translate(364px, 210px);
-}
-
-#exit-delete-button{
-    border: 0;
-    cursor: pointer;
-    font-weight: 700;
-    padding: var(--size-2) var(--size-4);
-    background: #33144d;
-    height: 40px;
-    width: 68px;
-    border-radius: 20%;
-    font-size: 15px;
-    color: rgb(133, 85, 211);
-    transform: translate(8px, 270px);
-}
-
 li {
     list-style-type: none
 }
@@ -237,9 +209,7 @@ li.info-item {
     white-space: pre;
 }
 
-/* .search-list-item{
-    white-space: pre;
-} */
+
 
 button#exit-info-button{
     border: 0;
@@ -253,4 +223,51 @@ button#exit-info-button{
     font-size: 15px;
     color: rgb(133, 85, 211);
     transform: translate(507px, 300px);
+}
+
+input#seeMoreRecords {
+    border: 0;
+    cursor: pointer;
+    font-weight: 700;
+    padding: var(--size-2) var(--size-4);
+    background: transparent;
+    height: 40px;
+    width: 144px;
+    border-radius: 20%;
+    font-size: 17px;
+    color: rgb(133, 85, 211);
+    transform: translate(12px, 3px);
+}
+
+#list {
+    color: white;
+}
+
+
+button#delete-button {
+    border: 0;
+    cursor: pointer;
+    font-weight: 700;
+    padding: var(--size-2) var(--size-4);
+    background: #33144d;
+    height: 40px;
+    width: 68px;
+    border-radius: 20%;
+    font-size: 15px;
+    color: rgb(133, 85, 211);
+    transform: translate(434px, 255px);
+}
+
+button#exit-delete-button {
+    border: 0;
+    cursor: pointer;
+    font-weight: 700;
+    padding: var(--size-2) var(--size-4);
+    background: #33144d;
+    height: 40px;
+    width: 68px;
+    border-radius: 20%;
+    font-size: 15px;
+    color: rgb(133, 85, 211);
+    transform: translate(8px, 294px);
 }

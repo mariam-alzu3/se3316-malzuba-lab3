@@ -1,4 +1,31 @@
 //frontend
+// Restricts input for the given searchBox to the given inputFilter.
+function setInputFilter(searchBox, inputFilter, errorMsg) {
+    ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop", "focusout"].forEach(function (event) {
+        searchBox.addEventListener(event, function (e) {
+            if (inputFilter(this.value)) {
+                // Accepted value
+                if (["keydown", "mousedown", "focusout"].indexOf(e.type) >= 0) {
+                    this.classList.remove("input-error");
+                    this.setCustomValidity("");
+                }
+                this.oldValue = this.value;
+                this.oldSelectionStart = this.selectionStart;
+                this.oldSelectionEnd = this.selectionEnd;
+            } else if (this.hasOwnProperty("oldValue")) {
+                // Rejected value - restore the previous one
+                this.classList.add("input-error");
+                this.setCustomValidity(errorMsg);
+                this.reportValidity();
+                this.value = this.oldValue;
+                this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+            } else {
+                // Rejected value - nothing to restore
+                this.value = "";
+            }
+        });
+    });
+}
 
 const main = document.getElementById('main');
 let tableData = [];
@@ -143,10 +170,17 @@ const trackID = document.getElementById('add-tracks');
 const savePlaylist = document.getElementById('save-button');
 
 
-savePlaylist.onclick = function () {
-    console.log(playlistName.value);
-    console.log(trackID.value);
-}
+//searchbox accepts letters from a-z or A-Z
+setInputFilter(document.getElementById("add-playlist-name"), function (value) {
+    return /^[a-zA-Z ].*/.test(value);
+}, "Please Enter A Character from A-Z ");
+
+
+
+// searchbox accepts numbers only between 1 and 20
+setInputFilter(document.getElementById("add-tracks"), function (value) {
+    return /^[0-9, ]*$/g.test(value);
+}, "Please Enter A Track ID");
 
 
 addMoreTracks.onclick = function () {
@@ -159,9 +193,11 @@ addMoreTracks.onclick = function () {
     tracksFieldsList.appendChild(newField);
 }
 
-//create
 function createPlaylist() {
-    const createdPlaylist = { name: playlistName.value, tracks: [trackID.value] }
+    let tracksArray = [];
+    tracksArray = trackID.value.split(", ");
+    console.log(tracksArray);
+    const createdPlaylist = { name: playlistName.value, tracks: tracksArray }
 
     fetch(`/api/data/playlist`, {
         method: "POST",
@@ -173,6 +209,7 @@ function createPlaylist() {
                 res.json()
             } else {
                 console.log("Error: ", res.status);
+                alert(res.status + " Cannot Create a Playlist Without Tracks! Please Enter At least 1 Track ID")
             }
             return res;
         })
@@ -198,9 +235,9 @@ function getPlaylists() {
             data.forEach(e => {
                 const item = document.createElement('li')
                 const link = document.createElement('a')
+
                 item.id = "playlist-list-item"
                 item.classList.add('playlist-list-item')
-
                 link.setAttribute('id', 'list-name')
                 link.setAttribute('href', '#')
                 item.appendChild(link)
@@ -224,6 +261,7 @@ function loadPlaylistInfo() {
         .then(data => {
             console.log(data)
 
+
             const item = document.createElement('li')
             item.classList.add('info-item')
             item.appendChild(document.createTextNode(`${data.name}`));
@@ -241,8 +279,6 @@ const closeInfo = document.getElementById("exit-info-button");         //exit bu
 //click on playlist to view information
 document.getElementById("playlists").addEventListener("click", function (e) {
     if (e.target && e.target.matches("li.playlist-list-item")) {
-        //e.target.className = "foo"; // new class name here
-        //alert("clicked " + e.target.innerText);
         infoPopup.showModal();
         loadPlaylistInfo();
     }
@@ -256,6 +292,7 @@ closeInfo.addEventListener("click", () => {
 const delPopup = document.getElementById("delete-playlist-popup");                     //pop-up
 const openBtn = document.getElementById("delete-playlist");           //search button to open the popup
 const closeBtn = document.getElementById("exit-delete-button");         //exit button closes the popup
+
 
 openBtn.addEventListener("click", () => {                         //clicking the search button shows the popup
     delPopup.showModal();
@@ -278,6 +315,7 @@ function deletePlaylist() {
                 res.json()
             } else {
                 console.log("Error: ", res.status);
+                alert(res.status + ` Cannot delete ${deletePlaylistName.value} because it doesn't exist!`)
             }
             return res;
         })
@@ -285,4 +323,9 @@ function deletePlaylist() {
         .catch(error => console.log(error))
 }
 
-document.getElementById('delete-button').addEventListener('click', deletePlaylist);
+//playlist name accepts letters from a-z or A-Z
+setInputFilter(document.getElementById("delete-playlist-name"), function (value) {
+    return /^[a-zA-Z ].*/.test(value);
+}, "Please Enter A Character from A-Z ");
+
+document.getElementById('delete-button').addEventListener('click', deletePlaylist)
