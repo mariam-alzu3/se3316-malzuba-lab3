@@ -36,7 +36,7 @@ var start = 0;
 var num = 22;
 
 function getData() {
-    fetch('http://localhost:3000/api/data/tracks')
+    fetch('/api/data/tracks')
         .then(response => response.json())
         .then(data => {
             console.log(data)
